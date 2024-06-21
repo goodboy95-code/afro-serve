@@ -1,0 +1,57 @@
+# 开发环境配置
+server:
+  # 服务器的HTTP端口，默认为8080
+  port: 8082
+  address: 0.0.0.0
+  servlet:
+    # 应用的访问路径
+    context-path: /
+  tomcat:
+    # tomcat的URI编码
+    uri-encoding: UTF-8
+# Spring配置
+spring:
+  config:
+    import: classpath:privacy.yml
+  # 资源信息
+  messages:
+    # 国际化资源文件路径
+    basename: messages
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: Asia/Shanghai
+  data:
+    redis:
+      host: ${redis.host}
+      port: 6379
+      database: 0
+      password: ${redis.password}
+      timeout: 100s
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: ${mysql.url}
+    username: ${mysql.username}
+    password: ${mysql.password}
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath*:mapper/*.xml
+# token配置
+token:
+  # 令牌密钥
+  secret: afro
+  # 令牌有效期（默认60分钟）
+  expireTime: 60
+
+system:
+  user:
+    online:
+      meantime: true
+      total: 3
+  upload:
+    avatar:
+      # 文件上传路径
+      path: /image/avatar
+
+

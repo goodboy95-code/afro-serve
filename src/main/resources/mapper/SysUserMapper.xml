@@ -1,0 +1,487 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ink.afro.mapper.SysUserMapper">
+
+    <resultMap type="ink.afro.entity.SysUser" id="SysUserMap">
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="userName" column="user_name" jdbcType="VARCHAR"/>
+        <result property="nickName" column="nick_name" jdbcType="VARCHAR"/>
+        <result property="email" column="email" jdbcType="VARCHAR"/>
+        <result property="phoneNumber" column="phone_number" jdbcType="VARCHAR"/>
+        <result property="age" column="age" jdbcType="INTEGER"/>
+        <result property="sex" column="sex" jdbcType="VARCHAR"/>
+        <result property="avatar" column="avatar" jdbcType="VARCHAR"/>
+        <result property="password" column="password" jdbcType="VARCHAR"/>
+        <result property="status" column="status" jdbcType="VARCHAR"/>
+        <result property="delFlag" column="del_flag" jdbcType="VARCHAR"/>
+        <result property="loginIp" column="login_ip" jdbcType="VARCHAR"/>
+        <result property="loginDate" column="login_date" jdbcType="TIMESTAMP"/>
+        <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateBy" column="update_by" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--新增记录-->
+    <insert id="insert" keyProperty="userId" useGeneratedKeys="true">
+        insert into sys_user(user_name, nick_name, email, phone_number, age, sex, avatar, password, status, del_flag,
+                             login_ip, login_date, create_by, create_time, update_by, update_time, remark)
+        values (#{userName}, #{nickName}, #{email}, #{phoneNumber}, #{age}, #{sex}, #{avatar}, #{password}, #{status},
+                #{delFlag}, #{loginIp}, #{loginDate}, #{createBy}, #{createTime}, #{updateBy}, #{updateTime}, #{remark})
+    </insert>
+
+    <!--批量新增记录-->
+    <insert id="insertBatch" keyProperty="userId" useGeneratedKeys="true">
+        insert into sys_user(user_name, nick_name, email, phone_number, age, sex, avatar, password, status, del_flag,
+        login_ip, login_date, create_by, create_time, update_by, update_time, remark)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.userName}, #{entity.nickName}, #{entity.email}, #{entity.phoneNumber}, #{entity.age},
+            #{entity.sex}, #{entity.avatar}, #{entity.password}, #{entity.status}, #{entity.delFlag}, #{entity.loginIp},
+            #{entity.loginDate}, #{entity.createBy}, #{entity.createTime}, #{entity.updateBy}, #{entity.updateTime},
+            #{entity.remark})
+        </foreach>
+    </insert>
+
+    <!--批量新增或更新记录-->
+    <insert id="insertOrUpdateBatch" keyProperty="userId" useGeneratedKeys="true">
+        insert into sys_user(user_name, nick_name, email, phone_number, age, sex, avatar, password, status, del_flag,
+        login_ip, login_date, create_by, create_time, update_by, update_time, remark)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.userName}, #{entity.nickName}, #{entity.email}, #{entity.phoneNumber}, #{entity.age},
+            #{entity.sex}, #{entity.avatar}, #{entity.password}, #{entity.status}, #{entity.delFlag}, #{entity.loginIp},
+            #{entity.loginDate}, #{entity.createBy}, #{entity.createTime}, #{entity.updateBy}, #{entity.updateTime},
+            #{entity.remark})
+        </foreach>
+        on duplicate key update
+        user_name = values(user_name),
+        nick_name = values(nick_name),
+        email = values(email),
+        phone_number = values(phone_number),
+        age = values(age),
+        sex = values(sex),
+        avatar = values(avatar),
+        password = values(password),
+        status = values(status),
+        del_flag = values(del_flag),
+        login_ip = values(login_ip),
+        login_date = values(login_date),
+        create_by = values(create_by),
+        create_time = values(create_time),
+        update_by = values(update_by),
+        update_time = values(update_time),
+        remark = values(remark)
+    </insert>
+
+    <!--通过主键删除记录-->
+    <delete id="deleteById">
+        delete
+        from sys_user
+        where user_id = #{userId}
+    </delete>
+
+    <!--通过主键修改记录-->
+    <update id="update">
+        update sys_user
+        <set>
+            <if test="userName != null and userName != ''">
+                user_name = #{userName},
+            </if>
+            <if test="nickName != null and nickName != ''">
+                nick_name = #{nickName},
+            </if>
+            <if test="email != null and email != ''">
+                email = #{email},
+            </if>
+            <if test="phoneNumber != null and phoneNumber != ''">
+                phone_number = #{phoneNumber},
+            </if>
+            <if test="age != null">
+                age = #{age},
+            </if>
+            <if test="sex != null and sex != ''">
+                sex = #{sex},
+            </if>
+            <if test="avatar != null and avatar != ''">
+                avatar = #{avatar},
+            </if>
+            <if test="password != null and password != ''">
+                password = #{password},
+            </if>
+            <if test="status != null and status != ''">
+                status = #{status},
+            </if>
+            <if test="delFlag != null and delFlag != ''">
+                del_flag = #{delFlag},
+            </if>
+            <if test="loginIp != null and loginIp != ''">
+                login_ip = #{loginIp},
+            </if>
+            <if test="loginDate != null">
+                login_date = #{loginDate},
+            </if>
+            <if test="createBy != null and createBy != ''">
+                create_by = #{createBy},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="updateBy != null and updateBy != ''">
+                update_by = #{updateBy},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="remark != null and remark != ''">
+                remark = #{remark},
+            </if>
+        </set>
+        where user_id = #{userId}
+    </update>
+
+    <!--通过主键查询单个记录-->
+    <select id="queryById" resultMap="SysUserMap">
+        select user_id,
+               user_name,
+               nick_name,
+               email,
+               phone_number,
+               age,
+               sex,
+               avatar,
+               password,
+               status,
+               del_flag,
+               login_ip,
+               login_date,
+               create_by,
+               create_time,
+               update_by,
+               update_time,
+               remark
+        from sys_user
+        where user_id = #{userId}
+    </select>
+
+    <!--通过sysUserName查询单个记录-->
+    <select id="queryByName" resultMap="SysUserMap">
+        select user_id,
+               user_name,
+               nick_name,
+               email,
+               phone_number,
+               age,
+               sex,
+               avatar,
+               password,
+               status,
+               del_flag,
+               login_ip,
+               login_date,
+               create_by,
+               create_time,
+               update_by,
+               update_time,
+               remark
+        from sys_user
+        where user_name = #{userName}
+    </select>
+
+    <!--查询所有记录-->
+    <select id="queryAll" resultMap="SysUserMap">
+        select user_id,
+               user_name,
+               nick_name,
+               email,
+               phone_number,
+               age,
+               sex,
+               avatar,
+               password,
+               status,
+               del_flag,
+               login_ip,
+               login_date,
+               create_by,
+               create_time,
+               update_by,
+               update_time,
+               remark
+        from sys_user
+        order by user_id
+    </select>
+
+    <!--查询指定行记录-->
+    <select id="queryAllByLimit" resultMap="SysUserMap">
+        select
+        user_id, user_name, nick_name, email, phone_number, age, sex, avatar, password, status, del_flag, login_ip,
+        login_date, create_by, create_time, update_by, update_time, remark
+        from sys_user
+        <where>
+            <if test="sysUser.userId != null">
+                and user_id = #{sysUser.userId}
+            </if>
+            <if test="sysUser.userName != null and sysUser.userName != ''">
+                and user_name = #{sysUser.userName}
+            </if>
+            <if test="sysUser.nickName != null and sysUser.nickName != ''">
+                and nick_name = #{sysUser.nickName}
+            </if>
+            <if test="sysUser.email != null and sysUser.email != ''">
+                and email = #{sysUser.email}
+            </if>
+            <if test="sysUser.phoneNumber != null and sysUser.phoneNumber != ''">
+                and phone_number = #{sysUser.phoneNumber}
+            </if>
+            <if test="sysUser.age != null">
+                and age = #{sysUser.age}
+            </if>
+            <if test="sysUser.sex != null and sysUser.sex != ''">
+                and sex = #{sysUser.sex}
+            </if>
+            <if test="sysUser.avatar != null and sysUser.avatar != ''">
+                and avatar = #{sysUser.avatar}
+            </if>
+            <if test="sysUser.password != null and sysUser.password != ''">
+                and password = #{sysUser.password}
+            </if>
+            <if test="sysUser.status != null and sysUser.status != ''">
+                and status = #{sysUser.status}
+            </if>
+            <if test="sysUser.delFlag != null and sysUser.delFlag != ''">
+                and del_flag = #{sysUser.delFlag}
+            </if>
+            <if test="sysUser.loginIp != null and sysUser.loginIp != ''">
+                and login_ip = #{sysUser.loginIp}
+            </if>
+            <if test="sysUser.loginDate != null">
+                and login_date = #{sysUser.loginDate}
+            </if>
+            <if test="sysUser.createBy != null and sysUser.createBy != ''">
+                and create_by = #{sysUser.createBy}
+            </if>
+            <if test="sysUser.createTime != null">
+                and create_time = #{sysUser.createTime}
+            </if>
+            <if test="sysUser.updateBy != null and sysUser.updateBy != ''">
+                and update_by = #{sysUser.updateBy}
+            </if>
+            <if test="sysUser.updateTime != null">
+                and update_time = #{sysUser.updateTime}
+            </if>
+            <if test="sysUser.remark != null and sysUser.remark != ''">
+                and remark = #{sysUser.remark}
+            </if>
+        </where>
+        order by user_id
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from sys_user
+        <where>
+            <if test="userId != null">
+                and user_id = #{userId}
+            </if>
+            <if test="userName != null and userName != ''">
+                and user_name = #{userName}
+            </if>
+            <if test="nickName != null and nickName != ''">
+                and nick_name = #{nickName}
+            </if>
+            <if test="email != null and email != ''">
+                and email = #{email}
+            </if>
+            <if test="phoneNumber != null and phoneNumber != ''">
+                and phone_number = #{phoneNumber}
+            </if>
+            <if test="age != null">
+                and age = #{age}
+            </if>
+            <if test="sex != null and sex != ''">
+                and sex = #{sex}
+            </if>
+            <if test="avatar != null and avatar != ''">
+                and avatar = #{avatar}
+            </if>
+            <if test="password != null and password != ''">
+                and password = #{password}
+            </if>
+            <if test="status != null and status != ''">
+                and status = #{status}
+            </if>
+            <if test="delFlag != null and delFlag != ''">
+                and del_flag = #{delFlag}
+            </if>
+            <if test="loginIp != null and loginIp != ''">
+                and login_ip = #{loginIp}
+            </if>
+            <if test="loginDate != null">
+                and login_date = #{loginDate}
+            </if>
+            <if test="createBy != null and createBy != ''">
+                and create_by = #{createBy}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateBy != null and updateBy != ''">
+                and update_by = #{updateBy}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+            <if test="remark != null and remark != ''">
+                and remark = #{remark}
+            </if>
+        </where>
+    </select>
+
+    <!--通过部门ID统计总行数-->
+    <select id="queryCountByDepartmentId" resultType="java.lang.Long">
+        select count(distinct u.user_id)
+        from sys_user u
+                 join sys_user_role ur on u.user_id = ur.user_id
+                 join sys_role_department rd on ur.role_id = rd.role_id
+        <where>
+            <if test="sysUser.userId != null">
+                and u.user_id = #{sysUser.userId}
+            </if>
+            <if test="sysUser.userName != null and sysUser.userName != ''">
+                and u.user_name = #{sysUser.userName}
+            </if>
+            <if test="sysUser.nickName != null and sysUser.nickName != ''">
+                and u.nick_name = #{sysUser.nickName}
+            </if>
+            <if test="sysUser.email != null and sysUser.email != ''">
+                and u.email = #{sysUser.email}
+            </if>
+            <if test="sysUser.phoneNumber != null and sysUser.phoneNumber != ''">
+                and u.phone_number = #{sysUser.phoneNumber}
+            </if>
+            <if test="sysUser.age != null">
+                and u.age = #{sysUser.age}
+            </if>
+            <if test="sysUser.sex != null and sysUser.sex != ''">
+                and u.sex = #{sysUser.sex}
+            </if>
+            <if test="sysUser.avatar != null and sysUser.avatar != ''">
+                and u.avatar = #{sysUser.avatar}
+            </if>
+            <if test="sysUser.password != null and sysUser.password != ''">
+                and u.password = #{sysUser.password}
+            </if>
+            <if test="sysUser.status != null and sysUser.status != ''">
+                and u.status = #{sysUser.status}
+            </if>
+            <if test="sysUser.delFlag != null and sysUser.delFlag != ''">
+                and u.del_flag = #{sysUser.delFlag}
+            </if>
+            <if test="sysUser.loginIp != null and sysUser.loginIp != ''">
+                and u.login_ip = #{sysUser.loginIp}
+            </if>
+            <if test="sysUser.loginDate != null">
+                and u.login_date = #{sysUser.loginDate}
+            </if>
+            <if test="sysUser.createBy != null and sysUser.createBy != ''">
+                and u.create_by = #{sysUser.createBy}
+            </if>
+            <if test="sysUser.createTime != null">
+                and u.create_time = #{sysUser.createTime}
+            </if>
+            <if test="sysUser.updateBy != null and sysUser.updateBy != ''">
+                and u.update_by = #{sysUser.updateBy}
+            </if>
+            <if test="sysUser.updateTime != null">
+                and u.update_time = #{sysUser.updateTime}
+            </if>
+            <if test="sysUser.remark != null and sysUser.remark != ''">
+                and u.remark = #{sysUser.remark}
+            </if>
+            <if test="departmentId != null and departmentId != ''">
+                and rd.department_id = #{departmentId}
+            </if>
+        </where>
+    </select>
+
+    <!--通过部门ID查询数据-->
+    <select id="queryByDepartmentIdByLimit" resultMap="SysUserMap">
+        select distinct u.*
+        from sys_user u
+        join sys_user_role ur on u.user_id = ur.user_id
+        join sys_role_department rd on ur.role_id = rd.role_id
+        <where>
+            <if test="sysUser.userId != null">
+                and u.user_id = #{sysUser.userId}
+            </if>
+            <if test="sysUser.userName != null and sysUser.userName != ''">
+                and u.user_name = #{sysUser.userName}
+            </if>
+            <if test="sysUser.nickName != null and sysUser.nickName != ''">
+                and u.nick_name = #{sysUser.nickName}
+            </if>
+            <if test="sysUser.email != null and sysUser.email != ''">
+                and u.email = #{sysUser.email}
+            </if>
+            <if test="sysUser.phoneNumber != null and sysUser.phoneNumber != ''">
+                and u.phone_number = #{sysUser.phoneNumber}
+            </if>
+            <if test="sysUser.age != null">
+                and u.age = #{sysUser.age}
+            </if>
+            <if test="sysUser.sex != null and sysUser.sex != ''">
+                and u.sex = #{sysUser.sex}
+            </if>
+            <if test="sysUser.avatar != null and sysUser.avatar != ''">
+                and u.avatar = #{sysUser.avatar}
+            </if>
+            <if test="sysUser.password != null and sysUser.password != ''">
+                and u.password = #{sysUser.password}
+            </if>
+            <if test="sysUser.status != null and sysUser.status != ''">
+                and u.status = #{sysUser.status}
+            </if>
+            <if test="sysUser.delFlag != null and sysUser.delFlag != ''">
+                and u.del_flag = #{sysUser.delFlag}
+            </if>
+            <if test="sysUser.loginIp != null and sysUser.loginIp != ''">
+                and u.login_ip = #{sysUser.loginIp}
+            </if>
+            <if test="sysUser.loginDate != null">
+                and u.login_date = #{sysUser.loginDate}
+            </if>
+            <if test="sysUser.createBy != null and sysUser.createBy != ''">
+                and u.create_by = #{sysUser.createBy}
+            </if>
+            <if test="sysUser.createTime != null">
+                and u.create_time = #{sysUser.createTime}
+            </if>
+            <if test="sysUser.updateBy != null and sysUser.updateBy != ''">
+                and u.update_by = #{sysUser.updateBy}
+            </if>
+            <if test="sysUser.updateTime != null">
+                and u.update_time = #{sysUser.updateTime}
+            </if>
+            <if test="sysUser.remark != null and sysUser.remark != ''">
+                and u.remark = #{sysUser.remark}
+            </if>
+            <if test="departmentId != null and departmentId != ''">
+                and rd.department_id = #{departmentId}
+            </if>
+        </where>
+        order by user_id
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <select id="queryByPhoneNumber" resultMap="SysUserMap">
+        select * from sys_user where phone_number = #{phoneNumber} limit 1
+    </select>
+    <select id="queryByEmail" resultMap="SysUserMap">
+        select * from sys_user where email = #{email} limit 1
+    </select>
+</mapper>
+

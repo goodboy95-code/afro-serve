@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ink.afro.mapper.SysRoleDepartmentMapper">
+
+    <resultMap type="ink.afro.entity.SysRoleDepartment" id="SysRoleDepartmentMap">
+        <result property="roleId" column="role_id" jdbcType="INTEGER"/>
+        <result property="departmentId" column="department_id" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--批量新增记录-->
+    <insert id="insertBatch">
+        insert into sys_role_department(role_id, department_id)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.roleId}, #{entity.departmentId})
+        </foreach>
+    </insert>
+
+    <!--批量删除记录-->
+    <delete id="deleteBatch">
+        delete from sys_role_department
+        where
+        <foreach collection="entities" item="entity" separator="or">
+            (role_id = #{entity.roleId} and department_id = #{entity.departmentId} )
+        </foreach>
+    </delete>
+
+    <!-- 删除所有记录 -->
+    <delete id="truncateData">
+        truncate table sys_role_department
+    </delete>
+
+    <!--查询所有记录-->
+    <select id="queryAll" resultMap="SysRoleDepartmentMap">
+        select role_id,
+               department_id
+        from sys_role_department
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from sys_role_department
+        <where>
+            <if test="roleId != null">
+                and role_id = #{roleId}
+            </if>
+            <if test="departmentId != null">
+                and department_id = #{departmentId}
+            </if>
+        </where>
+    </select>
+
+    <!--根据角色ID查询-->
+    <select id="queryByRoleId" resultMap="SysRoleDepartmentMap">
+        select role_id, department_id
+        from sys_role_department
+        where role_id = #{roleId}
+    </select>
+</mapper>
+

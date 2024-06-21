@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ink.afro.mapper.SysRoleMapper">
+
+    <resultMap type="ink.afro.entity.SysRole" id="SysRoleMap">
+        <result property="roleId" column="role_id" jdbcType="INTEGER"/>
+        <result property="roleName" column="role_name" jdbcType="VARCHAR"/>
+        <result property="roleSort" column="role_sort" jdbcType="INTEGER"/>
+        <result property="status" column="status" jdbcType="VARCHAR"/>
+        <result property="delFlag" column="del_flag" jdbcType="VARCHAR"/>
+        <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateBy" column="update_by" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--新增记录-->
+    <insert id="insert" keyProperty="roleId" useGeneratedKeys="true">
+        insert into sys_role(role_name, role_sort, status, del_flag, create_by, create_time, update_by, update_time,
+                             remark)
+        values (#{roleName}, #{roleSort}, #{status}, #{delFlag}, #{createBy}, #{createTime}, #{updateBy}, #{updateTime},
+                #{remark})
+    </insert>
+
+    <!--批量新增记录-->
+    <insert id="insertBatch" keyProperty="roleId" useGeneratedKeys="true">
+        insert into sys_role(role_name, role_sort, status, del_flag, create_by, create_time, update_by, update_time,
+        remark)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.roleName}, #{entity.roleSort}, #{entity.status}, #{entity.delFlag}, #{entity.createBy},
+            #{entity.createTime}, #{entity.updateBy}, #{entity.updateTime}, #{entity.remark})
+        </foreach>
+    </insert>
+
+    <!--批量新增或更新记录-->
+    <insert id="insertOrUpdateBatch" keyProperty="roleId" useGeneratedKeys="true">
+        insert into sys_role(role_name, role_sort, status, del_flag, create_by, create_time, update_by, update_time,
+        remark)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.roleName}, #{entity.roleSort}, #{entity.status}, #{entity.delFlag}, #{entity.createBy},
+            #{entity.createTime}, #{entity.updateBy}, #{entity.updateTime}, #{entity.remark})
+        </foreach>
+        on duplicate key update
+        role_name = values(role_name),
+        role_sort = values(role_sort),
+        status = values(status),
+        del_flag = values(del_flag),
+        create_by = values(create_by),
+        create_time = values(create_time),
+        update_by = values(update_by),
+        update_time = values(update_time),
+        remark = values(remark)
+    </insert>
+
+    <!--通过主键删除记录-->
+    <delete id="deleteById">
+        delete
+        from sys_role
+        where role_id = #{roleId}
+    </delete>
+
+    <!--通过主键修改记录-->
+    <update id="update">
+        update sys_role
+        <set>
+            <if test="roleName != null and roleName != ''">
+                role_name = #{roleName},
+            </if>
+            <if test="roleSort != null">
+                role_sort = #{roleSort},
+            </if>
+            <if test="status != null and status != ''">
+                status = #{status},
+            </if>
+            <if test="delFlag != null and delFlag != ''">
+                del_flag = #{delFlag},
+            </if>
+            <if test="createBy != null and createBy != ''">
+                create_by = #{createBy},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="updateBy != null and updateBy != ''">
+                update_by = #{updateBy},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="remark != null and remark != ''">
+                remark = #{remark},
+            </if>
+        </set>
+        where role_id = #{roleId}
+    </update>
+
+    <!--通过主键查询单个记录-->
+    <select id="queryById" resultMap="SysRoleMap">
+        select role_id,
+               role_name,
+               role_sort,
+               status,
+               del_flag,
+               create_by,
+               create_time,
+               update_by,
+               update_time,
+               remark
+        from sys_role
+        where role_id = #{roleId}
+    </select>
+
+    <!--通过sysRoleName查询单个记录-->
+    <select id="queryByName" resultMap="SysRoleMap">
+        select role_id,
+               role_name,
+               role_sort,
+               status,
+               del_flag,
+               create_by,
+               create_time,
+               update_by,
+               update_time,
+               remark
+        from sys_role
+        where role_name = #{roleName}
+    </select>
+
+    <!--查询所有记录-->
+    <select id="queryAll" resultMap="SysRoleMap">
+        select role_id,
+               role_name,
+               role_sort,
+               status,
+               del_flag,
+               create_by,
+               create_time,
+               update_by,
+               update_time,
+               remark
+        from sys_role
+    </select>
+
+    <!--查询指定行记录-->
+    <select id="queryAllByLimit" resultMap="SysRoleMap">
+        select
+        role_id, role_name, role_sort, status, del_flag, create_by, create_time, update_by, update_time, remark
+        from sys_role
+        <where>
+            <if test="sysRole.roleId != null">
+                and role_id = #{sysRole.roleId}
+            </if>
+            <if test="sysRole.roleName != null and sysRole.roleName != ''">
+                and role_name = #{sysRole.roleName}
+            </if>
+            <if test="sysRole.roleSort != null">
+                and role_sort = #{sysRole.roleSort}
+            </if>
+            <if test="sysRole.status != null and sysRole.status != ''">
+                and status = #{sysRole.status}
+            </if>
+            <if test="sysRole.delFlag != null and sysRole.delFlag != ''">
+                and del_flag = #{sysRole.delFlag}
+            </if>
+            <if test="sysRole.createBy != null and sysRole.createBy != ''">
+                and create_by = #{sysRole.createBy}
+            </if>
+            <if test="sysRole.createTime != null">
+                and create_time = #{sysRole.createTime}
+            </if>
+            <if test="sysRole.updateBy != null and sysRole.updateBy != ''">
+                and update_by = #{sysRole.updateBy}
+            </if>
+            <if test="sysRole.updateTime != null">
+                and update_time = #{sysRole.updateTime}
+            </if>
+            <if test="sysRole.remark != null and sysRole.remark != ''">
+                and remark = #{sysRole.remark}
+            </if>
+        </where>
+        order by role_sort
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from sys_role
+        <where>
+            <if test="roleId != null">
+                and role_id = #{roleId}
+            </if>
+            <if test="roleName != null and roleName != ''">
+                and role_name = #{roleName}
+            </if>
+            <if test="roleSort != null">
+                and role_sort = #{roleSort}
+            </if>
+            <if test="status != null and status != ''">
+                and status = #{status}
+            </if>
+            <if test="delFlag != null and delFlag != ''">
+                and del_flag = #{delFlag}
+            </if>
+            <if test="createBy != null and createBy != ''">
+                and create_by = #{createBy}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateBy != null and updateBy != ''">
+                and update_by = #{updateBy}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+            <if test="remark != null and remark != ''">
+                and remark = #{remark}
+            </if>
+        </where>
+    </select>
+
+    <!--根据用户ID获取角色-->
+    <select id="queryByUserId" resultMap="SysRoleMap">
+        select *
+        from sys_role r
+                 join sys_user_role ur on r.role_id = ur.role_id
+        where ur.user_id = #{userId}
+        order by r.role_sort desc
+    </select>
+</mapper>
+

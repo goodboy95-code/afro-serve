@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ink.afro.mapper.SysRoleMenuMapper">
+
+    <resultMap type="ink.afro.entity.SysRoleMenu" id="SysRoleMenuMap">
+        <result property="roleId" column="role_id" jdbcType="INTEGER"/>
+        <result property="menuId" column="menu_id" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--批量新增记录-->
+    <insert id="insertBatch">
+        insert into sys_role_menu(role_id, menu_id)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.roleId}, #{entity.menuId})
+        </foreach>
+    </insert>
+
+    <!--批量删除记录-->
+    <delete id="deleteBatch">
+        delete from sys_role_menu
+        where
+        <foreach collection="entities" item="entity" separator="or">
+            (role_id = #{entity.roleId} and menu_id = #{entity.menuId} )
+        </foreach>
+    </delete>
+
+    <!--清空表数据-->
+    <delete id="truncateData">
+        truncate table sys_role_menu
+    </delete>
+
+    <!--查询所有记录-->
+    <select id="queryAll" resultMap="SysRoleMenuMap">
+        select role_id,
+               menu_id
+        from sys_role_menu
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from sys_role_menu
+        <where>
+            <if test="roleId != null">
+                and role_id = #{roleId}
+            </if>
+            <if test="menuId != null">
+                and menu_id = #{menuId}
+            </if>
+        </where>
+    </select>
+
+    <!--根据角色ID查询-->
+    <select id="queryByRoleId" resultMap="SysRoleMenuMap">
+        select role_id,
+               menu_id
+        from sys_role_menu
+        where role_id = #{roleId}
+    </select>
+</mapper>
+

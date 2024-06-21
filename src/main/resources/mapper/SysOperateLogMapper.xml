@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ink.afro.mapper.SysOperateLogMapper">
+
+    <resultMap type="ink.afro.entity.SysOperateLog" id="SysOperateLogMap">
+        <result property="operateLogId" column="operate_log_id" jdbcType="INTEGER"/>
+        <result property="title" column="title" jdbcType="VARCHAR"/>
+        <result property="operateType" column="operate_type" jdbcType="VARCHAR"/>
+        <result property="methodName" column="method_name" jdbcType="VARCHAR"/>
+        <result property="requestMethod" column="request_method" jdbcType="VARCHAR"/>
+        <result property="operatorType" column="operator_type" jdbcType="VARCHAR"/>
+        <result property="operator" column="operator" jdbcType="VARCHAR"/>
+        <result property="requestUrl" column="request_url" jdbcType="VARCHAR"/>
+        <result property="ipAddress" column="ip_address" jdbcType="VARCHAR"/>
+        <result property="operateLocation" column="operate_location" jdbcType="VARCHAR"/>
+        <result property="requestParam" column="request_param" jdbcType="VARCHAR"/>
+        <result property="jsonResult" column="json_result" jdbcType="VARCHAR"/>
+        <result property="status" column="status" jdbcType="VARCHAR"/>
+        <result property="errorMsg" column="error_msg" jdbcType="VARCHAR"/>
+        <result property="operateTime" column="operate_time" jdbcType="TIMESTAMP"/>
+        <result property="costTime" column="cost_time" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--新增记录-->
+    <insert id="insert" keyProperty="operateLogId" useGeneratedKeys="true">
+        insert into sys_operate_log(title, operate_type, method_name, request_method, operator_type, operator,
+                                    request_url, ip_address, operate_location, request_param, json_result, status,
+                                    error_msg, operate_time, cost_time)
+        values (#{title}, #{operateType}, #{methodName}, #{requestMethod}, #{operatorType}, #{operator}, #{requestUrl},
+                #{ipAddress}, #{operateLocation}, #{requestParam}, #{jsonResult}, #{status}, #{errorMsg},
+                #{operateTime}, #{costTime})
+    </insert>
+
+    <!--批量新增记录-->
+    <insert id="insertBatch" keyProperty="operateLogId" useGeneratedKeys="true">
+        insert into sys_operate_log(title, operate_type, method_name, request_method, operator_type, operator,
+        request_url, ip_address, operate_location, request_param, json_result, status, error_msg, operate_time,
+        cost_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.title}, #{entity.operateType}, #{entity.methodName}, #{entity.requestMethod},
+            #{entity.operatorType}, #{entity.operator}, #{entity.requestUrl}, #{entity.ipAddress},
+            #{entity.operateLocation}, #{entity.requestParam}, #{entity.jsonResult}, #{entity.status},
+            #{entity.errorMsg}, #{entity.operateTime}, #{entity.costTime})
+        </foreach>
+    </insert>
+
+    <!--批量新增或更新记录-->
+    <insert id="insertOrUpdateBatch" keyProperty="operateLogId" useGeneratedKeys="true">
+        insert into sys_operate_log(title, operate_type, method_name, request_method, operator_type, operator,
+        request_url, ip_address, operate_location, request_param, json_result, status, error_msg, operate_time,
+        cost_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.title}, #{entity.operateType}, #{entity.methodName}, #{entity.requestMethod},
+            #{entity.operatorType}, #{entity.operator}, #{entity.requestUrl}, #{entity.ipAddress},
+            #{entity.operateLocation}, #{entity.requestParam}, #{entity.jsonResult}, #{entity.status},
+            #{entity.errorMsg}, #{entity.operateTime}, #{entity.costTime})
+        </foreach>
+        on duplicate key update
+        title = values(title),
+        operate_type = values(operate_type),
+        method_name = values(method_name),
+        request_method = values(request_method),
+        operator_type = values(operator_type),
+        operator = values(operator),
+        request_url = values(request_url),
+        ip_address = values(ip_address),
+        operate_location = values(operate_location),
+        request_param = values(request_param),
+        json_result = values(json_result),
+        status = values(status),
+        error_msg = values(error_msg),
+        operate_time = values(operate_time),
+        cost_time = values(cost_time)
+    </insert>
+
+    <!--通过主键删除记录-->
+    <delete id="deleteById">
+        delete
+        from sys_operate_log
+        where operate_log_id = #{operateLogId}
+    </delete>
+    <delete id="deleteBatch">
+        delete
+        from sys_operate_log
+        where operate_log_id in
+        <foreach collection="operateLogIds" item="operateLogId" open="(" separator="," close=")">
+            #{operateLogId}
+        </foreach>
+    </delete>
+    <delete id="deleteAll">
+        delete
+        from sys_operate_log;
+    </delete>
+
+    <!--通过主键修改记录-->
+    <update id="update">
+        update sys_operate_log
+        <set>
+            <if test="title != null and title != ''">
+                title = #{title},
+            </if>
+            <if test="operateType != null and operateType != ''">
+                operate_type = #{operateType},
+            </if>
+            <if test="methodName != null and methodName != ''">
+                method_name = #{methodName},
+            </if>
+            <if test="requestMethod != null and requestMethod != ''">
+                request_method = #{requestMethod},
+            </if>
+            <if test="operatorType != null and operatorType != ''">
+                operator_type = #{operatorType},
+            </if>
+            <if test="operator != null and operator != ''">
+                operator = #{operator},
+            </if>
+            <if test="requestUrl != null and requestUrl != ''">
+                request_url = #{requestUrl},
+            </if>
+            <if test="ipAddress != null and ipAddress != ''">
+                ip_address = #{ipAddress},
+            </if>
+            <if test="operateLocation != null and operateLocation != ''">
+                operate_location = #{operateLocation},
+            </if>
+            <if test="requestParam != null and requestParam != ''">
+                request_param = #{requestParam},
+            </if>
+            <if test="jsonResult != null and jsonResult != ''">
+                json_result = #{jsonResult},
+            </if>
+            <if test="status != null and status != ''">
+                status = #{status},
+            </if>
+            <if test="errorMsg != null and errorMsg != ''">
+                error_msg = #{errorMsg},
+            </if>
+            <if test="operateTime != null">
+                operate_time = #{operateTime},
+            </if>
+            <if test="costTime != null">
+                cost_time = #{costTime},
+            </if>
+        </set>
+        where operate_log_id = #{operateLogId}
+    </update>
+
+    <!--通过主键查询单个记录-->
+    <select id="queryById" resultMap="SysOperateLogMap">
+        select operate_log_id,
+               title,
+               operate_type,
+               method_name,
+               request_method,
+               operator_type,
+               operator,
+               request_url,
+               ip_address,
+               operate_location,
+               request_param,
+               json_result,
+               status,
+               error_msg,
+               operate_time,
+               cost_time
+        from sys_operate_log
+        where operate_log_id = #{operateLogId}
+    </select>
+
+    <!--查询所有记录-->
+    <select id="queryAll" resultMap="SysOperateLogMap">
+        select operate_log_id,
+               title,
+               operate_type,
+               method_name,
+               request_method,
+               operator_type,
+               operator,
+               request_url,
+               ip_address,
+               operate_location,
+               request_param,
+               json_result,
+               status,
+               error_msg,
+               operate_time,
+               cost_time
+        from sys_operate_log
+    </select>
+
+    <!--查询指定行记录-->
+    <select id="queryAllByLimit" resultMap="SysOperateLogMap">
+        select
+        operate_log_id, title, operate_type, method_name, request_method, operator_type, operator, request_url, ip_address,
+        operate_location, request_param, json_result, status, error_msg, operate_time, cost_time
+        from sys_operate_log
+        <where>
+            <if test="sysOperateLog.operateLogId != null">
+                and operate_log_id = #{sysOperateLog.operateLogId}
+            </if>
+            <if test="sysOperateLog.title != null and sysOperateLog.title != ''">
+                and title = #{sysOperateLog.title}
+            </if>
+            <if test="sysOperateLog.operateType != null and sysOperateLog.operateType != ''">
+                and operate_type = #{sysOperateLog.operateType}
+            </if>
+            <if test="sysOperateLog.methodName != null and sysOperateLog.methodName != ''">
+                and method_name = #{sysOperateLog.methodName}
+            </if>
+            <if test="sysOperateLog.requestMethod != null and sysOperateLog.requestMethod != ''">
+                and request_method = #{sysOperateLog.requestMethod}
+            </if>
+            <if test="sysOperateLog.operatorType != null and sysOperateLog.operatorType != ''">
+                and operator_type = #{sysOperateLog.operatorType}
+            </if>
+            <if test="sysOperateLog.operator != null and sysOperateLog.operator != ''">
+                and operator = #{sysOperateLog.operator}
+            </if>
+            <if test="sysOperateLog.requestUrl != null and sysOperateLog.requestUrl != ''">
+                and request_url = #{sysOperateLog.requestUrl}
+            </if>
+            <if test="sysOperateLog.ipAddress != null and sysOperateLog.ipAddress != ''">
+                and ip_address = #{sysOperateLog.ipAddress}
+            </if>
+            <if test="sysOperateLog.operateLocation != null and sysOperateLog.operateLocation != ''">
+                and operate_location = #{sysOperateLog.operateLocation}
+            </if>
+            <if test="sysOperateLog.requestParam != null and sysOperateLog.requestParam != ''">
+                and request_param = #{sysOperateLog.requestParam}
+            </if>
+            <if test="sysOperateLog.jsonResult != null and sysOperateLog.jsonResult != ''">
+                and json_result = #{sysOperateLog.jsonResult}
+            </if>
+            <if test="sysOperateLog.status != null and sysOperateLog.status != ''">
+                and status = #{sysOperateLog.status}
+            </if>
+            <if test="sysOperateLog.errorMsg != null and sysOperateLog.errorMsg != ''">
+                and error_msg = #{sysOperateLog.errorMsg}
+            </if>
+            <if test="sysOperateLog.beginOperateTime != null and sysOperateLog.endOperateTime != null">
+                and operate_time between #{sysOperateLog.beginOperateTime} and #{sysOperateLog.endOperateTime}
+            </if>
+            <if test="sysOperateLog.costTime != null">
+                and cost_time = #{sysOperateLog.costTime}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from sys_operate_log
+        <where>
+            <if test="operateLogId != null">
+                and operate_log_id = #{operateLogId}
+            </if>
+            <if test="title != null and title != ''">
+                and title = #{title}
+            </if>
+            <if test="operateType != null and operateType != ''">
+                and operate_type = #{operateType}
+            </if>
+            <if test="methodName != null and methodName != ''">
+                and method_name = #{methodName}
+            </if>
+            <if test="requestMethod != null and requestMethod != ''">
+                and request_method = #{requestMethod}
+            </if>
+            <if test="operatorType != null and operatorType != ''">
+                and operator_type = #{operatorType}
+            </if>
+            <if test="operator != null and operator != ''">
+                and operator = #{operator}
+            </if>
+            <if test="requestUrl != null and requestUrl != ''">
+                and request_url = #{requestUrl}
+            </if>
+            <if test="ipAddress != null and ipAddress != ''">
+                and ip_address = #{ipAddress}
+            </if>
+            <if test="operateLocation != null and operateLocation != ''">
+                and operate_location = #{operateLocation}
+            </if>
+            <if test="requestParam != null and requestParam != ''">
+                and request_param = #{requestParam}
+            </if>
+            <if test="jsonResult != null and jsonResult != ''">
+                and json_result = #{jsonResult}
+            </if>
+            <if test="status != null and status != ''">
+                and status = #{status}
+            </if>
+            <if test="errorMsg != null and errorMsg != ''">
+                and error_msg = #{errorMsg}
+            </if>
+            <if test="operateTime != null">
+                and operate_time = #{operateTime}
+            </if>
+            <if test="beginOperateTime != null and endOperateTime != null">
+                and operate_time between #{beginOperateTime} and #{endOperateTime}
+            </if>
+            <if test="costTime != null">
+                and cost_time = #{costTime}
+            </if>
+        </where>
+    </select>
+</mapper>
+

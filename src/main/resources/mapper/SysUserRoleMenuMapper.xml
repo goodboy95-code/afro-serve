@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ink.afro.mapper.SysUserRoleMenuMapper">
+
+    <resultMap type="ink.afro.entity.SysUserRoleMenu" id="SysUserRoleMenuMap">
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="roleId" column="role_id" jdbcType="INTEGER"/>
+        <result property="menuId" column="menu_id" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--批量新增记录-->
+    <insert id="insertBatch">
+        insert into sys_user_role_menu(user_id, role_id, menu_id)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.userId}, #{entity.roleId}, #{entity.menuId})
+        </foreach>
+    </insert>
+
+    <!--批量删除记录-->
+    <delete id="deleteBatch">
+        delete from sys_user_role_menu
+        where
+        <foreach collection="entities" item="entity" separator="or">
+            (user_id = #{entity.userId} and role_id = #{entity.roleId} and menu_id = #{entity.menuId} )
+        </foreach>
+    </delete>
+    <delete id="truncateData">
+        truncate table sys_user_role_menu
+    </delete>
+
+    <!--查询所有记录-->
+    <select id="queryAll" resultMap="SysUserRoleMenuMap">
+        select user_id,
+               role_id,
+               menu_id
+        from sys_user_role_menu
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from sys_user_role_menu
+        <where>
+            <if test="userId != null">
+                and user_id = #{userId}
+            </if>
+            <if test="roleId != null">
+                and role_id = #{roleId}
+            </if>
+            <if test="menuId != null">
+                and menu_id = #{menuId}
+            </if>
+        </where>
+    </select>
+
+    <!--通过用户角色ID查询列-->
+    <select id="queryByUserIdAndRoleId" resultMap="SysUserRoleMenuMap">
+        select user_id, role_id, menu_id
+        from sys_user_role_menu
+        where user_id = #{userId}
+          and role_id = #{roleId}
+    </select>
+</mapper>
+
