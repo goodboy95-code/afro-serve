@@ -10,7 +10,7 @@
     </parent>
     <groupId>ink.afro</groupId>
     <artifactId>afro-serve</artifactId>
-    <version>0.1.1</version>
+    <version>0.1.2</version>
     <name>afro-serve</name>
     <description>afro-serve</description>
     <properties>

@@ -54,6 +54,6 @@ system:
   upload:
     avatar:
       # 文件上传路径
-      path: /image/avatar
+      path: ${upload.avatar.path}
 
 

@@ -1,0 +1,13 @@
+mysql:
+  username: ${MYSQL_USERNAME}
+  url: jdbc:mysql://${SERVER_HOST}:${MYSQL_PORT}/afro?useUnicode=true&characterEncoding=utf8
+  password: ${MYSQL_PASSWORD}
+
+redis:
+  host: ${SERVER_HOST}
+  password: ${REDIS_PASSWORD}
+
+upload:
+  avatar:
+    # 文件上传路径
+    path: /image/avatar
