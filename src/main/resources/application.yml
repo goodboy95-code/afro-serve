@@ -11,8 +11,10 @@ server:
     uri-encoding: UTF-8
 # Spring配置
 spring:
+  profiles:
+    active: "@spring.profiles.active@"
   config:
-    import: classpath:privacy.yml
+    import: classpath:application-${spring.profiles.active}.yml
   # 资源信息
   messages:
     # 国际化资源文件路径
